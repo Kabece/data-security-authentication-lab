@@ -8,6 +8,6 @@ public class Server {
 
     public static void main(String[] args) throws RemoteException {
         Registry registry = LocateRegistry.createRegistry(5099);
-        registry.rebind("hello", new ServiceImpl());
+        registry.rebind("printer", new ServiceImpl());
     }
 }
