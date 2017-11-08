@@ -13,7 +13,7 @@ import java.rmi.RemoteException;
 
 public class Client {
 
-    private String hashPassword(String password) {
+    public String hashPassword(String password) {
         String salt = "$2a$10$B9ZlYa6livQarz3RLt0KeO";
         return BCrypt.hashpw(password, salt);
     }

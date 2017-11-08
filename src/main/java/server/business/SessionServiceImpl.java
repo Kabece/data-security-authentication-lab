@@ -1,7 +1,6 @@
 package server.business;
 
 import server.security.Authenticator;
-import sun.rmi.runtime.Log;
 
 import javax.security.auth.login.LoginException;
 import java.rmi.NoSuchObjectException;
