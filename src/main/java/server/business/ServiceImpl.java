@@ -1,7 +1,5 @@
 package server.business;
 
-import server.security.Authenticator;
-
 import java.rmi.NoSuchObjectException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -9,10 +7,7 @@ import java.rmi.server.Unreferenced;
 
 public class ServiceImpl extends UnicastRemoteObject implements Service, Unreferenced {
 
-    private Authenticator authenticator;
-
     public ServiceImpl() throws RemoteException {
-        this.authenticator = new Authenticator();
     }
 
     public void logout() throws RemoteException {
