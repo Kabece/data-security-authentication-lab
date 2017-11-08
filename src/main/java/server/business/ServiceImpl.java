@@ -15,6 +15,18 @@ public class ServiceImpl extends UnicastRemoteObject implements Service, Unrefer
         this.authenticator = new Authenticator();
     }
 
+    public void logout() throws RemoteException {
+        unexportObject(this, true);
+    }
+
+    public void unreferenced() {
+        try {
+            unexportObject(this, true);
+        } catch (NoSuchObjectException e) {
+            e.printStackTrace();
+        }
+    }
+
     public String print(String filename, String printer) throws RemoteException {
         return "print method invoked with filename: " + filename + " and printer: " + printer;
     }
@@ -49,17 +61,5 @@ public class ServiceImpl extends UnicastRemoteObject implements Service, Unrefer
 
     public String setConfig(String parameter, String value) throws RemoteException {
         return "setConfig method invoked with parameter: " + parameter + " and value: " + value;
-    }
-
-    public void logout() throws RemoteException {
-        unexportObject(this, true);
-    }
-
-    public void unreferenced() {
-        try {
-            unexportObject(this, true);
-        } catch (NoSuchObjectException e) {
-            e.printStackTrace();
-        }
     }
 }
