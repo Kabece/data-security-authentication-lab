@@ -1,13 +1,20 @@
 package server.business;
 
+import server.security.Authenticator;
+
 import java.rmi.NoSuchObjectException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.rmi.server.Unreferenced;
+import java.security.SecureRandom;
 
 public class ServiceImpl extends UnicastRemoteObject implements Service, Unreferenced {
 
+    private Integer sessionId = null;
+
     public ServiceImpl() throws RemoteException {
+        SecureRandom secureRandom = new SecureRandom();
+        this.sessionId = secureRandom.nextInt(16);
     }
 
     public void logout() throws RemoteException {
@@ -26,8 +33,11 @@ public class ServiceImpl extends UnicastRemoteObject implements Service, Unrefer
         return "print method invoked with filename: " + filename + " and printer: " + printer;
     }
 
-    public String queue() throws RemoteException {
-        return "queue method invoked";
+    public String queue(int sessionId) throws RemoteException {
+        if (Authenticator.authorizeRequest(sessionId))
+            return "queue method invoked";
+        else
+            return "Session not authorized";
     }
 
     public String topQueue(int job) throws RemoteException {
@@ -56,5 +66,9 @@ public class ServiceImpl extends UnicastRemoteObject implements Service, Unrefer
 
     public String setConfig(String parameter, String value) throws RemoteException {
         return "setConfig method invoked with parameter: " + parameter + " and value: " + value;
+    }
+
+    public Integer getSessionId() throws RemoteException {
+        return sessionId;
     }
 }

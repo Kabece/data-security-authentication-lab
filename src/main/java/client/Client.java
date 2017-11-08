@@ -24,8 +24,8 @@ public class Client {
         Client client = new Client();
         RemoteSecurityManager securityManager = (RemoteSecurityManager) Naming.lookup("rmi://localhost:5099/printer");
         Service service = securityManager.loginToService(username, client.hashPassword(password));
-        System.out.println(service.print("filename", "printer"));
-//        System.out.println(service.queue());
+//        System.out.println(sessionResponse.getService().print("filename", "printer"));
+        System.out.println(service.queue(service.getSessionId()));
 //        System.out.println(service.topQueue(1));
 //        System.out.println(service.start());
 //        System.out.println(service.stop());
@@ -33,7 +33,5 @@ public class Client {
 //        System.out.println(service.status());
 //        System.out.println(service.readConfig("parameter"));
 //        System.out.println(service.setConfig("parameter", "value")) ;
-        service.logout();
-        service.queue();
     }
 }

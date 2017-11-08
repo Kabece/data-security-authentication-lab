@@ -1,5 +1,6 @@
 package server;
 
+import server.security.RemoteSecurityManager;
 import server.security.RemoteSecurityManagerImpl;
 
 import java.rmi.RemoteException;
@@ -10,6 +11,7 @@ public class Server {
 
     public static void main(String[] args) throws RemoteException {
         Registry registry = LocateRegistry.createRegistry(5099);
-        registry.rebind("printer", new RemoteSecurityManagerImpl());
+        RemoteSecurityManager securityManager = new RemoteSecurityManagerImpl();
+        registry.rebind("printer", securityManager);
     }
 }
