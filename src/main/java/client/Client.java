@@ -1,8 +1,10 @@
 package client;
 
 import org.mindrot.jbcrypt.BCrypt;
-import server.Service;
+import server.business.Service;
+import server.security.RemoteSecurityManager;
 
+import javax.security.auth.login.LoginException;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
@@ -16,13 +18,14 @@ public class Client {
         return BCrypt.hashpw(password, salt);
     }
 
-    public static void main(String[] args) throws RemoteException, NotBoundException, MalformedURLException {
+    public static void main(String[] args) throws RemoteException, NotBoundException, MalformedURLException, LoginException {
         String username = "admin";
         String password = "admin";
         Client client = new Client();
-        Service service = (Service) Naming.lookup("rmi://localhost:5099/printer");
+        RemoteSecurityManager securityManager = (RemoteSecurityManager) Naming.lookup("rmi://localhost:5099/printer");
+        Service service = securityManager.loginToService(username, client.hashPassword(password));
         System.out.println(service.print("filename", "printer"));
-        System.out.println(service.queue(username, client.hashPassword(password)));
+        System.out.println(service.queue());
         System.out.println(service.topQueue(1));
         System.out.println(service.start());
         System.out.println(service.stop());

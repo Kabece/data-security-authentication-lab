@@ -1,5 +1,9 @@
 package server;
 
+import server.business.ServiceImpl;
+import server.security.RemoteSecurityManagerImpl;
+import server.util.DBUtil;
+
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -11,6 +15,6 @@ public class Server {
         Connection conn = DBUtil.getConnection();
 
         Registry registry = LocateRegistry.createRegistry(5099);
-        registry.rebind("printer", new ServiceImpl());
+        registry.rebind("printer", new RemoteSecurityManagerImpl());
     }
 }

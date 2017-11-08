@@ -1,4 +1,6 @@
-package server;
+package server.security;
+
+import server.util.DBUtil;
 
 import java.sql.Connection;
 import java.sql.SQLException;

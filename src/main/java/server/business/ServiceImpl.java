@@ -1,26 +1,26 @@
-package server;
+package server.business;
 
+import server.security.Authenticator;
+
+import java.rmi.NoSuchObjectException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.rmi.server.Unreferenced;
 
-public class ServiceImpl extends UnicastRemoteObject implements Service {
+public class ServiceImpl extends UnicastRemoteObject implements Service, Unreferenced {
 
     private Authenticator authenticator;
 
-    protected ServiceImpl() throws RemoteException {
+    public ServiceImpl() throws RemoteException {
         this.authenticator = new Authenticator();
     }
-
 
     public String print(String filename, String printer) throws RemoteException {
         return "print method invoked with filename: " + filename + " and printer: " + printer;
     }
 
-    public String queue(String username, String password) throws RemoteException {
-        if (authenticator.authenticateUser(username, password))
-            return "queue method invoked";
-        else
-            return "User not authenticated!";
+    public String queue() throws RemoteException {
+        return "queue method invoked";
     }
 
     public String topQueue(int job) throws RemoteException {
@@ -49,5 +49,17 @@ public class ServiceImpl extends UnicastRemoteObject implements Service {
 
     public String setConfig(String parameter, String value) throws RemoteException {
         return "setConfig method invoked with parameter: " + parameter + " and value: " + value;
+    }
+
+    public void logout() throws RemoteException {
+        unexportObject(this, true);
+    }
+
+    public void unreferenced() {
+        try {
+            unexportObject(this, true);
+        } catch (NoSuchObjectException e) {
+            e.printStackTrace();
+        }
     }
 }
