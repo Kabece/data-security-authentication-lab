@@ -8,7 +8,7 @@ import java.rmi.server.UnicastRemoteObject;
 
 public class SingleRequestServiceImpl extends UnicastRemoteObject implements SingleRequestService {
 
-    Authenticator authenticator;
+    private Authenticator authenticator;
 
     public SingleRequestServiceImpl() throws RemoteException {
         this.authenticator = new Authenticator();

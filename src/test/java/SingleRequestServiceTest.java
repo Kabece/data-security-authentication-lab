@@ -1,5 +1,4 @@
 import client.Client;
-import org.junit.Before;
 import org.junit.Test;
 import server.business.SingleRequestService;
 
@@ -9,7 +8,7 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class SingleRequestServiceTest {
 

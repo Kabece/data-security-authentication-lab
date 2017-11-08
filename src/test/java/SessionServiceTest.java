@@ -40,6 +40,7 @@ public class SessionServiceTest {
     public void notAuthenticatedSession() throws RemoteException, NotBoundException, MalformedURLException, LoginException {
         RemoteSessionManager remoteSessionManager = (RemoteSessionManager) Naming.lookup("rmi://localhost:5099/sessionPrinter");
         SessionService sessionService = remoteSessionManager.loginToService(username, client.hashPassword("wrong password"));
+        sessionService.start();
     }
 
     @Test(expected = NoSuchObjectException.class)
