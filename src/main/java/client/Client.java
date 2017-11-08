@@ -1,8 +1,9 @@
 package client;
 
 import org.mindrot.jbcrypt.BCrypt;
-import server.business.Service;
-import server.security.RemoteSecurityManager;
+import server.business.SessionService;
+import server.business.SingleRequestService;
+import server.security.RemoteSessionManager;
 
 import javax.security.auth.login.LoginException;
 import java.net.MalformedURLException;
@@ -12,26 +13,43 @@ import java.rmi.RemoteException;
 
 public class Client {
 
-    private String salt = "$2a$10$B9ZlYa6livQarz3RLt0KeO";
-
     private String hashPassword(String password) {
+        String salt = "$2a$10$B9ZlYa6livQarz3RLt0KeO";
         return BCrypt.hashpw(password, salt);
     }
 
-    public static void main(String[] args) throws RemoteException, NotBoundException, MalformedURLException, LoginException {
+    public static void main(String[] args) throws RemoteException, NotBoundException, MalformedURLException {
         String username = "admin";
         String password = "admin";
         Client client = new Client();
-        RemoteSecurityManager securityManager = (RemoteSecurityManager) Naming.lookup("rmi://localhost:5099/printer");
-        Service service = securityManager.loginToService(username, client.hashPassword(password));
-//        System.out.println(sessionResponse.getService().print("filename", "printer"));
-        System.out.println(service.queue(service.getSessionId()));
-//        System.out.println(service.topQueue(1));
-//        System.out.println(service.start());
-//        System.out.println(service.stop());
-//        System.out.println(service.restart());
-//        System.out.println(service.status());
-//        System.out.println(service.readConfig("parameter"));
-//        System.out.println(service.setConfig("parameter", "value")) ;
+        SingleRequestService singleRequestService = (SingleRequestService) Naming.lookup("rmi://localhost:5099/singleRequestPrinter");
+        RemoteSessionManager remoteSessionManager = (RemoteSessionManager) Naming.lookup("rmi://localhost:5099/sessionPrinter");
+        SessionService sessionService = null;
+        try {
+            // Single Request invocations
+            System.out.println(singleRequestService.print("filename", "printer", username, client.hashPassword(password)));
+            System.out.println(singleRequestService.queue(username, client.hashPassword(password)));
+            System.out.println(singleRequestService.topQueue(1, username, client.hashPassword(password)));
+            System.out.println(singleRequestService.start(username, client.hashPassword(password)));
+            System.out.println(singleRequestService.stop(username, client.hashPassword(password)));
+            System.out.println(singleRequestService.restart(username, client.hashPassword(password)));
+            System.out.println(singleRequestService.status(username, client.hashPassword(password)));
+            System.out.println(singleRequestService.readConfig("parameter", username, client.hashPassword(password)));
+            System.out.println(singleRequestService.setConfig("parameter", "value", username, client.hashPassword(password)));
+
+            // Session invocations
+            sessionService = remoteSessionManager.loginToService(username, client.hashPassword(password));
+            System.out.println(sessionService.print("filename", "printer"));
+            System.out.println(sessionService.queue());
+            System.out.println(sessionService.topQueue(1));
+            System.out.println(sessionService.start());
+            System.out.println(sessionService.stop());
+            System.out.println(sessionService.restart());
+            System.out.println(sessionService.status());
+            System.out.println(sessionService.readConfig("parameter"));
+            System.out.println(sessionService.setConfig("parameter", "value"));
+        } catch (LoginException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

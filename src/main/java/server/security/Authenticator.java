@@ -5,19 +5,21 @@ import server.util.DBUtil;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Authenticator {
 
     private Connection connection;
-    public static List<Integer> sessionIds = new ArrayList<Integer>();
+    static Map<Integer, String> sessionIds = new HashMap<Integer, String>();
 
     public Authenticator() {
         this.connection = DBUtil.getConnection();
     }
 
     public boolean authenticateUser(String username, String password) {
-        String passwordInDatabase = "";
+        String passwordInDatabase = null;
         try {
             passwordInDatabase = DBUtil.getPasswordForUser(username, connection);
         } catch (SQLException e) {
@@ -27,6 +29,14 @@ public class Authenticator {
     }
 
     public static boolean authorizeRequest(int sessionId) {
-        return sessionIds.contains(sessionId);
+        return sessionIds.containsKey(sessionId);
+    }
+
+    public static void removeSession(int sessionId) {
+        sessionIds.remove(sessionId);
+    }
+
+    public static String getUsernameForSessionId(int sessionId) {
+        return sessionIds.get(sessionId);
     }
 }

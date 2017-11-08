@@ -1,7 +1,7 @@
 package server;
 
-import server.security.RemoteSecurityManager;
-import server.security.RemoteSecurityManagerImpl;
+import server.business.SingleRequestServiceImpl;
+import server.security.RemoteSessionManagerImpl;
 
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -11,7 +11,7 @@ public class Server {
 
     public static void main(String[] args) throws RemoteException {
         Registry registry = LocateRegistry.createRegistry(5099);
-        RemoteSecurityManager securityManager = new RemoteSecurityManagerImpl();
-        registry.rebind("printer", securityManager);
+        registry.rebind("sessionPrinter", new RemoteSessionManagerImpl());
+        registry.rebind("singleRequestPrinter", new SingleRequestServiceImpl());
     }
 }
