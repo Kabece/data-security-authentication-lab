@@ -20,12 +20,15 @@ public class DBUtil {
         return conn;
     }
 
-    public static String getPasswordForUser(String username, Connection conn) throws SQLException {
-        String query = "SELECT password FROM users WHERE username = ?";
+    public static String[] getPasswordForUser(String username, Connection conn) throws SQLException {
+        String query = "SELECT password, salt FROM users WHERE username = ?";
         PreparedStatement preparedStatement = conn.prepareStatement(query);
         preparedStatement.setString(1, username);
         ResultSet rs = preparedStatement.executeQuery();
         rs.next();
-        return rs.getString("password");
+        String[] passAndSalt = new String[2];
+        passAndSalt[0] = rs.getString("password");
+        passAndSalt[1] = rs.getString("salt");
+        return passAndSalt;
     }
 }

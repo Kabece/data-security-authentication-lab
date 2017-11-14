@@ -17,19 +17,21 @@ public class Authenticator {
         this.connection = DBUtil.getConnection();
     }
 
-    public String hashPassword(String password) {
-        String salt = "$2a$10$B9ZlYa6livQarz3RLt0KeO";
+    public String hashPassword(String password, String salt) {
         return BCrypt.hashpw(password, salt);
     }
 
     public boolean authenticateUser(String username, String password) {
         String passwordInDatabase = null;
+        String saltInDatabase = null;
         try {
-            passwordInDatabase = DBUtil.getPasswordForUser(username, connection);
+            String[] dataFromDatabase = DBUtil.getPasswordForUser(username, connection);
+            passwordInDatabase = dataFromDatabase[0];
+            saltInDatabase = dataFromDatabase[1];
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return hashPassword(password).equals(passwordInDatabase);
+        return hashPassword(password, saltInDatabase).equals(passwordInDatabase);
     }
 
     public static boolean authorizeRequest(int sessionId) {
