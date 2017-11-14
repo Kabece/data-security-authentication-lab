@@ -1,5 +1,6 @@
 package server.security;
 
+import org.mindrot.jbcrypt.BCrypt;
 import server.util.DBUtil;
 
 import java.sql.Connection;
@@ -16,6 +17,11 @@ public class Authenticator {
         this.connection = DBUtil.getConnection();
     }
 
+    public String hashPassword(String password) {
+        String salt = "$2a$10$B9ZlYa6livQarz3RLt0KeO";
+        return BCrypt.hashpw(password, salt);
+    }
+
     public boolean authenticateUser(String username, String password) {
         String passwordInDatabase = null;
         try {
@@ -23,7 +29,7 @@ public class Authenticator {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return password.equals(passwordInDatabase);
+        return hashPassword(password).equals(passwordInDatabase);
     }
 
     public static boolean authorizeRequest(int sessionId) {

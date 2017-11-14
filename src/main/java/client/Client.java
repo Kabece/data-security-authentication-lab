@@ -13,11 +13,6 @@ import java.rmi.RemoteException;
 
 public class Client {
 
-    public String hashPassword(String password) {
-        String salt = "$2a$10$B9ZlYa6livQarz3RLt0KeO";
-        return BCrypt.hashpw(password, salt);
-    }
-
     public static void main(String[] args) throws RemoteException, NotBoundException, MalformedURLException {
         String username = "admin";
         String password = "admin";
@@ -27,18 +22,18 @@ public class Client {
         SessionService sessionService = null;
         try {
             // Single Request invocations
-            System.out.println(singleRequestService.print("filename", "printer", username, client.hashPassword(password)));
-            System.out.println(singleRequestService.queue(username, client.hashPassword(password)));
-            System.out.println(singleRequestService.topQueue(1, username, client.hashPassword(password)));
-            System.out.println(singleRequestService.start(username, client.hashPassword(password)));
-            System.out.println(singleRequestService.stop(username, client.hashPassword(password)));
-            System.out.println(singleRequestService.restart(username, client.hashPassword(password)));
-            System.out.println(singleRequestService.status(username, client.hashPassword(password)));
-            System.out.println(singleRequestService.readConfig("parameter", username, client.hashPassword(password)));
-            System.out.println(singleRequestService.setConfig("parameter", "value", username, client.hashPassword(password)));
+            System.out.println(singleRequestService.print("filename", "printer", username, password));
+            System.out.println(singleRequestService.queue(username, password));
+            System.out.println(singleRequestService.topQueue(1, username, password));
+            System.out.println(singleRequestService.start(username, password));
+            System.out.println(singleRequestService.stop(username, password));
+            System.out.println(singleRequestService.restart(username, password));
+            System.out.println(singleRequestService.status(username, password));
+            System.out.println(singleRequestService.readConfig("parameter", username, password));
+            System.out.println(singleRequestService.setConfig("parameter", "value", username, password));
 
             // Session invocations
-            sessionService = remoteSessionManager.loginToService(username, client.hashPassword(password));
+            sessionService = remoteSessionManager.loginToService(username, password);
             System.out.println(sessionService.print("filename", "printer"));
             System.out.println(sessionService.queue());
             System.out.println(sessionService.topQueue(1));

@@ -25,7 +25,7 @@ public class SessionServiceTest {
     @Test
     public void authenticatedSession() throws RemoteException, NotBoundException, MalformedURLException, LoginException {
         RemoteSessionManager remoteSessionManager = (RemoteSessionManager) Naming.lookup("rmi://localhost:5099/sessionPrinter");
-        SessionService sessionService = remoteSessionManager.loginToService(username, client.hashPassword(password));
+        SessionService sessionService = remoteSessionManager.loginToService(username, password);
 
         String expectedResponseQueue = "Session || User: " + username + " invoked queue method";
         String expectedResponseStart = "Session || User: " + username + " invoked start method";
@@ -39,14 +39,14 @@ public class SessionServiceTest {
     @Test(expected = LoginException.class)
     public void notAuthenticatedSession() throws RemoteException, NotBoundException, MalformedURLException, LoginException {
         RemoteSessionManager remoteSessionManager = (RemoteSessionManager) Naming.lookup("rmi://localhost:5099/sessionPrinter");
-        SessionService sessionService = remoteSessionManager.loginToService(username, client.hashPassword("wrong password"));
+        SessionService sessionService = remoteSessionManager.loginToService(username, "wrong password");
         sessionService.start();
     }
 
     @Test(expected = NoSuchObjectException.class)
     public void loggedOutSession() throws RemoteException, NotBoundException, MalformedURLException, LoginException {
         RemoteSessionManager remoteSessionManager = (RemoteSessionManager) Naming.lookup("rmi://localhost:5099/sessionPrinter");
-        SessionService sessionService = remoteSessionManager.loginToService(username, client.hashPassword(password));
+        SessionService sessionService = remoteSessionManager.loginToService(username, password);
         sessionService.start();
         sessionService.logout();
         sessionService.start();

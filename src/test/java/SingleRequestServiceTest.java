@@ -26,14 +26,14 @@ public class SingleRequestServiceTest {
     @Test
     public void authenticatedInvocation() throws LoginException, RemoteException {
         String expectedResponse = "Single Request || User: " + username + " invoked queue method";
-        String actualResponse = singleRequestService.queue(username, client.hashPassword(password));
+        String actualResponse = singleRequestService.queue(username, password);
 
         assertEquals(expectedResponse, actualResponse);
     }
 
     @Test(expected = LoginException.class)
     public void notAuthenticatedInvocation() throws LoginException, RemoteException {
-        singleRequestService.queue(username, client.hashPassword("wrong password"));
+        singleRequestService.queue(username, "wrong password");
     }
 
 }
