@@ -2,6 +2,7 @@ package server.security;
 
 import server.business.SessionService;
 import server.business.SessionServiceImpl;
+import server.util.AuthorizationException;
 
 import javax.security.auth.login.LoginException;
 import java.rmi.RemoteException;
@@ -12,7 +13,7 @@ public class RemoteSessionManagerImpl extends UnicastRemoteObject implements Rem
     public RemoteSessionManagerImpl() throws RemoteException {
     }
 
-    public SessionService loginToService(String username, String password) throws LoginException, RemoteException {
+    public SessionService loginToService(String username, String password) throws AuthorizationException, LoginException, RemoteException {
         Authenticator authenticator = new Authenticator();
         if (authenticator.authenticateUser(username, password)) {
             SessionService sessionService = new SessionServiceImpl();
