@@ -17,6 +17,7 @@ public class RemoteSessionManagerImpl extends UnicastRemoteObject implements Rem
         if (authenticator.authenticateUser(username, password)) {
             SessionService sessionService = new SessionServiceImpl();
             Authenticator.sessionIds.put(sessionService.getSessionId(), username);
+            authenticator.authorizeSession(username, sessionService.getSessionId());
             return sessionService;
         }
         throw new LoginException("User authentication failed.");

@@ -12,6 +12,7 @@ public class Authenticator {
 
     private Connection connection;
     static Map<Integer, String> sessionIds = new HashMap<Integer, String>();
+    static Map<Integer, Map<String, Boolean>> sessionAccessRights = new HashMap<>();
 
     public Authenticator() {
         this.connection = DBUtil.getConnection();
@@ -34,7 +35,7 @@ public class Authenticator {
         return hashPassword(password, saltInDatabase).equals(passwordInDatabase);
     }
 
-    public boolean authorizeUser(String username, String resourceName) {
+    public boolean authorizeSingleRequest(String username, String resourceName) {
         Map<String, Boolean> userACL = null;
         try {
             userACL = DBUtil.getAclForUser(username, connection);
@@ -48,12 +49,24 @@ public class Authenticator {
         }
     }
 
-    public static boolean authorizeRequest(int sessionId) {
-        return sessionIds.containsKey(sessionId);
+    public void authorizeSession(String username, Integer sessionId) {
+        Map<String, Boolean> userACL = null;
+        try {
+            userACL = DBUtil.getAclForUser(username, connection);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        sessionAccessRights.put(sessionId, userACL);
+    }
+
+
+    public static boolean authorizeRequest(int sessionId, String resourceName) {
+        return sessionIds.containsKey(sessionId) && sessionAccessRights.get(sessionId).get(resourceName);
     }
 
     public static void removeSession(int sessionId) {
         sessionIds.remove(sessionId);
+        sessionAccessRights.remove(sessionId);
     }
 
     public static String getUsernameForSessionId(int sessionId) {

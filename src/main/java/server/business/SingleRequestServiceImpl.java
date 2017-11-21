@@ -17,7 +17,7 @@ public class SingleRequestServiceImpl extends UnicastRemoteObject implements Sin
 
     public String print(String filename, String printer, String username, String password) throws RemoteException, LoginException, AuthorizationException {
         if (this.authenticator.authenticateUser(username, password)) {
-            if (this.authenticator.authorizeUser(username, "print")) {
+            if (this.authenticator.authorizeSingleRequest(username, "print")) {
                 return "Single Request || User: " + username + " invoked print method with printer: " + printer
                         + " and file: " + filename;
             } else {
@@ -30,7 +30,7 @@ public class SingleRequestServiceImpl extends UnicastRemoteObject implements Sin
 
     public String queue(String username, String password) throws RemoteException, LoginException, AuthorizationException {
         if (this.authenticator.authenticateUser(username, password)) {
-            if (this.authenticator.authorizeUser(username, "queue")) {
+            if (this.authenticator.authorizeSingleRequest(username, "queue")) {
                 return "Single Request || User: " + username + " invoked queue method";
             } else {
                 throw new AuthorizationException("User " + username + " is not auhtorized to invoke queue method.");
@@ -42,7 +42,7 @@ public class SingleRequestServiceImpl extends UnicastRemoteObject implements Sin
 
     public String topQueue(int job, String username, String password) throws RemoteException, LoginException, AuthorizationException {
         if (this.authenticator.authenticateUser(username, password)) {
-            if (this.authenticator.authorizeUser(username, "topQueue")) {
+            if (this.authenticator.authorizeSingleRequest(username, "topQueue")) {
                 return "Single Request || User: " + username + " invoked topQueue method with job: " + job;
             } else {
                 throw new AuthorizationException("User " + username + " is not auhtorized to invoke topQueue method.");
@@ -54,7 +54,7 @@ public class SingleRequestServiceImpl extends UnicastRemoteObject implements Sin
 
     public String start(String username, String password) throws RemoteException, LoginException, AuthorizationException {
         if (this.authenticator.authenticateUser(username, password)) {
-            if (this.authenticator.authorizeUser(username, "start")) {
+            if (this.authenticator.authorizeSingleRequest(username, "start")) {
                 return "Single Request || User: " + username + " invoked start method";
             } else {
                 throw new AuthorizationException("User " + username + " is not auhtorized to invoke start method.");
@@ -66,7 +66,7 @@ public class SingleRequestServiceImpl extends UnicastRemoteObject implements Sin
 
     public String stop(String username, String password) throws RemoteException, LoginException, AuthorizationException {
         if (this.authenticator.authenticateUser(username, password)) {
-            if (this.authenticator.authorizeUser(username, "stop")) {
+            if (this.authenticator.authorizeSingleRequest(username, "stop")) {
                 return "Single Request || User: " + username + " invoked stop method";
             } else {
                 throw new AuthorizationException("User " + username + " is not auhtorized to invoke stop method.");
@@ -78,7 +78,7 @@ public class SingleRequestServiceImpl extends UnicastRemoteObject implements Sin
 
     public String restart(String username, String password) throws RemoteException, LoginException, AuthorizationException {
         if (this.authenticator.authenticateUser(username, password)) {
-            if (this.authenticator.authorizeUser(username, "restart")) {
+            if (this.authenticator.authorizeSingleRequest(username, "restart")) {
                 return "Single Request || User: " + username + " invoked restart method";
             } else {
                 throw new AuthorizationException("User " + username + " is not auhtorized to invoke restart method.");
@@ -90,7 +90,7 @@ public class SingleRequestServiceImpl extends UnicastRemoteObject implements Sin
 
     public String status(String username, String password) throws RemoteException, LoginException, AuthorizationException {
         if (this.authenticator.authenticateUser(username, password)) {
-            if (this.authenticator.authorizeUser(username, "status")) {
+            if (this.authenticator.authorizeSingleRequest(username, "status")) {
                 return "Single Request || User: " + username + " invoked status method";
             } else {
                 throw new AuthorizationException("User " + username + " is not auhtorized to invoke status method.");
@@ -102,7 +102,7 @@ public class SingleRequestServiceImpl extends UnicastRemoteObject implements Sin
 
     public String readConfig(String parameter, String username, String password) throws RemoteException, LoginException, AuthorizationException {
         if (this.authenticator.authenticateUser(username, password)) {
-            if (this.authenticator.authorizeUser(username, "readConfig")) {
+            if (this.authenticator.authorizeSingleRequest(username, "readConfig")) {
                 return "Single Request || User: " + username + " invoked readConfig method with parameter: " + parameter;
             } else {
                 throw new AuthorizationException("User " + username + " is not auhtorized to invoke readConfig method.");
@@ -114,7 +114,7 @@ public class SingleRequestServiceImpl extends UnicastRemoteObject implements Sin
 
     public String setConfig(String parameter, String value, String username, String password) throws RemoteException, LoginException, AuthorizationException {
         if (this.authenticator.authenticateUser(username, password)) {
-            if (this.authenticator.authorizeUser(username, "setConfig")) {
+            if (this.authenticator.authorizeSingleRequest(username, "setConfig")) {
                 return "Single Request || User: " + username + " invoked setConfig method with parameter: " + parameter + " and value: " + value;
             } else {
                 throw new AuthorizationException("User " + username + " is not auhtorized to invoke setConfig method.");

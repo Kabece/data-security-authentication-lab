@@ -15,13 +15,11 @@ public class SingleRequestServiceTest {
 
     private String username = "bob";
     private String password = "bob";
-    private Client client;
     private SingleRequestService singleRequestService;
 
     public SingleRequestServiceTest() throws RemoteException, NotBoundException, MalformedURLException {
         this.singleRequestService = (SingleRequestService) Naming.lookup(
                 "rmi://localhost:5099/singleRequestPrinter");
-        this.client = new Client();
     }
 
     @Test
