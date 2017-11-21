@@ -4,6 +4,7 @@ import org.mindrot.jbcrypt.BCrypt;
 import server.business.SessionService;
 import server.business.SingleRequestService;
 import server.security.RemoteSessionManager;
+import server.util.AuthorizationException;
 
 import javax.security.auth.login.LoginException;
 import java.net.MalformedURLException;
@@ -14,8 +15,8 @@ import java.rmi.RemoteException;
 public class Client {
 
     public static void main(String[] args) throws RemoteException, NotBoundException, MalformedURLException {
-        String username = "admin";
-        String password = "admin";
+        String username = "alice";
+        String password = "alice";
         Client client = new Client();
         SingleRequestService singleRequestService = (SingleRequestService) Naming.lookup("rmi://localhost:5099/singleRequestPrinter");
         RemoteSessionManager remoteSessionManager = (RemoteSessionManager) Naming.lookup("rmi://localhost:5099/sessionPrinter");
@@ -43,7 +44,8 @@ public class Client {
             System.out.println(sessionService.status());
             System.out.println(sessionService.readConfig("parameter"));
             System.out.println(sessionService.setConfig("parameter", "value"));
-        } catch (LoginException e) {
+
+        } catch (LoginException | AuthorizationException e) {
             System.out.println(e.getMessage());
         }
     }

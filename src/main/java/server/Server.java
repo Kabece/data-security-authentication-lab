@@ -1,6 +1,7 @@
 package server;
 
 import server.business.SingleRequestServiceImpl;
+import server.security.Authenticator;
 import server.security.RemoteSessionManagerImpl;
 
 import java.rmi.RemoteException;

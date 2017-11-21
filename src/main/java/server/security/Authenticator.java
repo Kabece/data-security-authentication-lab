@@ -34,6 +34,20 @@ public class Authenticator {
         return hashPassword(password, saltInDatabase).equals(passwordInDatabase);
     }
 
+    public boolean authorizeUser(String username, String resourceName) {
+        Map<String, Boolean> userACL = null;
+        try {
+            userACL = DBUtil.getAclForUser(username, connection);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        if (userACL != null) {
+            return userACL.get(resourceName);
+        } else {
+            return false;
+        }
+    }
+
     public static boolean authorizeRequest(int sessionId) {
         return sessionIds.containsKey(sessionId);
     }

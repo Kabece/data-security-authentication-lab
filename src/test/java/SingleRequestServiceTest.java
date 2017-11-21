@@ -1,6 +1,7 @@
 import client.Client;
 import org.junit.Test;
 import server.business.SingleRequestService;
+import server.util.AuthorizationException;
 
 import javax.security.auth.login.LoginException;
 import java.net.MalformedURLException;
@@ -12,8 +13,8 @@ import static org.junit.Assert.assertEquals;
 
 public class SingleRequestServiceTest {
 
-    private String username = "admin";
-    private String password = "admin";
+    private String username = "bob";
+    private String password = "bob";
     private Client client;
     private SingleRequestService singleRequestService;
 
@@ -24,16 +25,21 @@ public class SingleRequestServiceTest {
     }
 
     @Test
-    public void authenticatedInvocation() throws LoginException, RemoteException {
-        String expectedResponse = "Single Request || User: " + username + " invoked queue method";
-        String actualResponse = singleRequestService.queue(username, password);
+    public void authenticatedAndAuthorizedInvocation() throws LoginException, RemoteException, AuthorizationException {
+        String expectedResponse = "Single Request || User: " + username + " invoked start method";
+        String actualResponse = singleRequestService.start(username, password);
 
         assertEquals(expectedResponse, actualResponse);
     }
 
     @Test(expected = LoginException.class)
-    public void notAuthenticatedInvocation() throws LoginException, RemoteException {
-        singleRequestService.queue(username, "wrong password");
+    public void notAuthenticatedInvocation() throws LoginException, RemoteException, AuthorizationException {
+        singleRequestService.start(username, "wrong password");
+    }
+
+    @Test(expected = AuthorizationException.class)
+    public void noAuthorizedInvocation() throws LoginException, RemoteException, AuthorizationException {
+        singleRequestService.queue(username, password);
     }
 
 }
